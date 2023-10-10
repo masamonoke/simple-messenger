@@ -2,6 +2,7 @@ package com.masamonoke.simplemessenger.entities.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.query.sqm.tree.expression.SqmByUnit;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +21,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Long id;
+    @Column(unique = true)
     private String username;
     private String firstName;
     private String lastName;
+    @Column(unique = true)
     private String email;
+    private boolean isEmailConfirmed = false;
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
