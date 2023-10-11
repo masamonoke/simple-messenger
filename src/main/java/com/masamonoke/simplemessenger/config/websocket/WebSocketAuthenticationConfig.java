@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.lang.NonNull;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -28,14 +29,15 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketAuthenticationConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private TokenRepo tokenRepo;
+    private final TokenRepo tokenRepo;
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+            public Message<?> preSend(@NonNull Message<?> message, @NonNull MessageChannel channel) {
                 var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                assert accessor != null;
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     var authorization = accessor.getNativeHeader("Authorization");
                     log.info("X-Authorization: {}", authorization);
@@ -44,11 +46,11 @@ public class WebSocketAuthenticationConfig implements WebSocketMessageBrokerConf
                     var username = jwtService.extractUsername(jwt);
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         // TODO: getting exception when try to access db from this auth routine
-                        /*var isTokenValid = tokenRepo.findByToken(jwt)
+                        var isTokenValid = tokenRepo.findByToken(jwt)
                                 .map(t -> !t.isExpired() && !t.isRevoked())
-                                .orElse(false);*/
+                                .orElse(false);
                         var userDetails = userDetailsService.loadUserByUsername(username);
-                        if (jwtService.isTokenValid(jwt, userDetails)) {
+                        if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                             var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                             SecurityContextHolder.getContext().setAuthentication(authToken);
                             accessor.setUser(authToken);
