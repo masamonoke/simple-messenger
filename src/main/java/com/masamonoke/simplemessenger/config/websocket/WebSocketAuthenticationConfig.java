@@ -45,7 +45,6 @@ public class WebSocketAuthenticationConfig implements WebSocketMessageBrokerConf
                     var jwt = authorization.get(0);
                     var username = jwtService.extractUsername(jwt);
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        // TODO: getting exception when try to access db from this auth routine
                         var isTokenValid = tokenRepo.findByToken(jwt)
                                 .map(t -> !t.isExpired() && !t.isRevoked())
                                 .orElse(false);

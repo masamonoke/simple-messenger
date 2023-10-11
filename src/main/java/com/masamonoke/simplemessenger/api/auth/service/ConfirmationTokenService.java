@@ -1,4 +1,4 @@
-package com.masamonoke.simplemessenger.api.service;
+package com.masamonoke.simplemessenger.api.auth.service;
 
 import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
 import com.masamonoke.simplemessenger.repo.ConfirmationTokenRepo;
