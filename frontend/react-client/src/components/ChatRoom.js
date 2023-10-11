@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import {over} from 'stompjs';
 import SockJS from 'sockjs-client';
+import jwtDecode from "jwt-decode"
 
 var stompClient =null;
 const ChatRoom = () => {
     const [privateChats, setPrivateChats] = useState(new Map());     
     const [publicChats, setPublicChats] = useState([]); 
-    const [tab,setTab] =useState("CHATROOM");
+    const [tab,setTab] = useState("CHATROOM");
     const [userData, setUserData] = useState({
         username: '',
         receivername: '',
         connected: false,
-        message: ''
+        message: '',
+        token: ''
       });
     useEffect(() => {
       console.log(userData);
     }, [userData]);
 
     const connect =()=>{
-        let Sock = new SockJS('http://localhost:3003/ws');
+        let Sock = new SockJS('http://localhost:3003/ws')
         stompClient = over(Sock);
-        stompClient.connect({},onConnected, onError);
+        stompClient.connect({"Authorization": userData.token}, onConnected, onError);
     }
 
     const onConnected = () => {
@@ -108,12 +110,16 @@ const ChatRoom = () => {
         }
     }
 
-    const handleUsername=(event)=>{
+    const handleToken=(event)=>{
         const {value}=event.target;
-        setUserData({...userData,"username": value});
+        setUserData({...userData,"token": value});
     }
 
     const registerUser=()=>{
+        let token = userData.token
+        let decoded = jwtDecode(token)
+        console.log("token:" + token)
+        userData.username = decoded.sub
         connect();
     }
     return (
@@ -165,11 +171,10 @@ const ChatRoom = () => {
         <div className="register">
             <input
                 id="user-name"
-                placeholder="Enter your name"
+                placeholder="Enter your JWT token"
                 name="userName"
-                value={userData.username}
-                onChange={handleUsername}
-                margin="normal"
+                value={userData.token}
+                onChange={handleToken}
               />
               <button type="button" onClick={registerUser}>
                     connect
