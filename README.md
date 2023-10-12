@@ -51,7 +51,8 @@ npm run start
 ## Authorization and authentication
 All authorization and authentication endpoints is excluded from Spring Security
 ### Register
-Adds new user to database and returns access and refresh JWT
+Adds new user to database and returns access and refresh JWT.
+Note that password is not validating (yet).
 #### Request
 ```
 POST: localhost:3003/api/v1/auth/register
