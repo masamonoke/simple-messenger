@@ -14,10 +14,13 @@ import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
 
+// TODO: create UserNotFoundByIdException class and UserNotFoundByUsernameException
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
@@ -70,7 +73,7 @@ public class UserProfileService {
         throw produceUserException(user, id);
     }
 
-    public User updatePassword(User user, String token) throws JsonProcessingException {
+    User updatePassword(User user, String token) throws JsonProcessingException {
         var savedUser = userRepo.findById(user.getId())
                 .orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", user.getId())));
         if (!isValidUser(token, savedUser)) {
@@ -80,7 +83,7 @@ public class UserProfileService {
         return userRepo.save(savedUser);
     }
 
-    public User updateEmail(Long id, String email, String token) throws JsonProcessingException {
+    User updateEmail(Long id, String email, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", id)));
         if (!isValidUser(token, user)) {
             throw produceUserException(user, id);
@@ -95,7 +98,7 @@ public class UserProfileService {
         return user;
     }
 
-    public void deleteAccount(Long id, String token) throws JsonProcessingException {
+    void deleteAccount(Long id, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", id)));
         if (!isValidUser(token, user)) {
             throw produceUserException(user, id);
@@ -105,7 +108,7 @@ public class UserProfileService {
     }
 
     // TODO: enable account after email sent link confirmation
-    public User restoreAccount(User user) {
+    User restoreAccount(User user) {
         var savedUser = userRepo
                 .findByUsername(user.getUsername())
                 .orElseThrow(() -> new InvalidParameterException(String.format("User with username=%s not found", user.getUsername())));
@@ -119,4 +122,53 @@ public class UserProfileService {
         }
         throw new InvalidParameterException(String.format("There is no user with username=%s or email=$s", user.getEmail(), user.getEmail()));
     }
+
+    UserDisplay addFriend(String username, String friendUsername) {
+        var friend = userRepo
+                .findByUsername(friendUsername)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", friendUsername)));
+        var user = userRepo
+                .findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
+        if (user.getFriends().contains(friend)) {
+            throw new IllegalStateException(String.format("%s is already friend of %s", friendUsername, user.getUsername()));
+        }
+        user.getFriends().add(friend);
+        userRepo.save(user);
+        return new UserDisplay(user);
+    }
+
+    Set<User> getFriends(String username) {
+        var user = userRepo
+                .findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
+        return user.getFriends();
+    }
+
+    Set<User> getAnotherUserFriendsList(Long id) {
+        var user = userRepo
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with id=%d", id)));
+        if (user.isFriendsHidden()) {
+            throw new IllegalStateException(String.format("User with id=%d hid his friends list", id));
+        }
+        return user.getFriends();
+    }
+
+    User hideFriends(String username) {
+        var user = userRepo
+                .findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
+        user.setFriendsHidden(true);
+        return userRepo.save(user);
+    }
+
+    User allowPrivateMessageOnlyToFriends(String username) {
+        var user = userRepo
+                .findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
+        user.setPrivateMessageFromFriendsOnly(true);
+        return userRepo.save(user);
+    }
+
 }

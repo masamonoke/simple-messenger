@@ -26,9 +26,9 @@ const ChatRoom = () => {
     }
 
     const onConnected = () => {
-        setUserData({...userData,"connected": true});
+        setUserData({...userData, "connected": true});
         stompClient.subscribe('/topic/public', onMessageReceived);
-        stompClient.subscribe('/user/'+userData.username+'/private', onPrivateMessage);
+        stompClient.subscribe('/user/' + userData.username + '/private', onPrivateMessage);
         userJoin();
     }
 
@@ -57,12 +57,12 @@ const ChatRoom = () => {
     }
     
     const onPrivateMessage = (payload)=>{
-        console.log(payload);
+        console.log("Payload" + payload);
         var payloadData = JSON.parse(payload.body);
-        if(privateChats.get(payloadData.senderName)){
+        if (privateChats.get(payloadData.senderName)) {
             privateChats.get(payloadData.senderName).push(payloadData);
             setPrivateChats(new Map(privateChats));
-        }else{
+        } else {
             let list =[];
             list.push(payloadData);
             privateChats.set(payloadData.senderName,list);
@@ -72,7 +72,6 @@ const ChatRoom = () => {
 
     const onError = (err) => {
         console.log(err);
-        
     }
 
     const handleMessage =(event)=>{

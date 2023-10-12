@@ -27,7 +27,6 @@ public class ChatController {
 
     @MessageMapping("/private_message")
     ChatMessage receivePrivateMessage(@Payload ChatMessage message) {
-        //messagingTemplate.convertAndSendToUser(message.getReceiverName(), "/private", message); // user/<username>/private
         return chatService.receivePrivateMessage(message);
     }
 

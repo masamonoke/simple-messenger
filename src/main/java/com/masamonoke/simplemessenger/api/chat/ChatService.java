@@ -24,10 +24,24 @@ public class ChatService {
     private final SimpMessagingTemplate messagingTemplate;
 
     ChatMessage receivePrivateMessage(ChatMessage message) {
-        var receiver = message.getReceiverName();
-        userRepo
-                .findByUsername(receiver)
-                .orElseThrow(() -> new InvalidParameterException(String.format("Cannot find user with username=%s", receiver)));
+        var receiverName = message.getReceiverName();
+        var receiver = userRepo
+                .findByUsername(receiverName)
+                .orElseThrow(() -> new InvalidParameterException(String.format("Cannot find user with username=%s", receiverName)));
+        if (receiver.isPrivateMessageFromFriendsOnly()) {
+            var isFriend = false;
+            if (!receiver.getFriends().isEmpty()) {
+                for (var f : receiver.getFriends()) {
+                    if (message.getSenderName().equals(f.getUsername())) {
+                        isFriend = true;
+                        break;
+                    }
+                }
+            }
+            if (!isFriend) {
+                throw new IllegalStateException(String.format("User username=%s is not friend of User username=%s", message.getSenderName(), receiverName));
+            }
+        }
         message.setDate(LocalDateTime.now());
         var savedMessage = chatMessageRepo.save(message);
         messagingTemplate.convertAndSendToUser(message.getReceiverName(), "/private", message); // user/<username>/private

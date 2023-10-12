@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
+
+import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
 import static com.masamonoke.simplemessenger.api.Utils.getTokenFromHeader;
 
 @RestController
@@ -55,5 +58,39 @@ public class UserProfileController {
     @PutMapping("/restore")
     ResponseEntity<User> restoreAccount(@RequestBody User user) {
         return ResponseEntity.ok(userProfileService.restoreAccount(user));
+    }
+
+    @PutMapping("/add_friend")
+    ResponseEntity<UserDisplay> addFriend(
+            @RequestParam("friend") String friendUsername, @RequestHeader("Authorization") String header) throws JsonProcessingException {
+        var token = getTokenFromHeader(header);
+        var username = decodeToken(token).get("sub");
+        return ResponseEntity.ok(userProfileService.addFriend(username, friendUsername));
+    }
+
+    @GetMapping("/friends")
+    ResponseEntity<Set<User>> getFriendsList(@RequestHeader("Authorization") String header) throws JsonProcessingException {
+        var token = getTokenFromHeader(header);
+        var username = decodeToken(token).get("sub");
+        return ResponseEntity.ok(userProfileService.getFriends(username));
+    }
+
+    @GetMapping("friends/{user_id}")
+    ResponseEntity<Set<User>> getAnotherUserFriendsList(@PathVariable Long user_id) {
+        return ResponseEntity.ok(userProfileService.getAnotherUserFriendsList(user_id));
+    }
+
+    @PutMapping("hide_friends")
+    ResponseEntity<User> hideFriends(@RequestHeader("Authorization") String header) throws JsonProcessingException {
+        var token = getTokenFromHeader(header);
+        var username = decodeToken(token).get("sub");
+        return ResponseEntity.ok(userProfileService.hideFriends(username));
+    }
+
+    @PutMapping("restrict_messages")
+    ResponseEntity<User> restrictMessages(@RequestHeader("Authorization") String header) throws JsonProcessingException {
+        var token = getTokenFromHeader(header);
+        var username = decodeToken(token).get("sub");
+        return ResponseEntity.ok(userProfileService.allowPrivateMessageOnlyToFriends(username));
     }
 }

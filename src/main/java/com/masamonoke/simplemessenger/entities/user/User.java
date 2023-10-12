@@ -1,5 +1,6 @@
 package com.masamonoke.simplemessenger.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "usr")
@@ -16,6 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -31,6 +34,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     private boolean isEnabled;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private Set<User> friends;
+    private boolean isFriendsHidden = false;
+    private boolean isPrivateMessageFromFriendsOnly = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
