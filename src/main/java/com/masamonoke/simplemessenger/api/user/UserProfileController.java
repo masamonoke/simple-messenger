@@ -81,10 +81,10 @@ public class UserProfileController {
     }
 
     @PutMapping("hide_friends")
-    ResponseEntity<User> hideFriends(@RequestHeader("Authorization") String header) throws JsonProcessingException {
+    ResponseEntity<User> hideFriends(@RequestHeader("Authorization") String header, @RequestParam("hide") boolean hide) throws JsonProcessingException {
         var token = getTokenFromHeader(header);
         var username = decodeToken(token).get("sub");
-        return ResponseEntity.ok(userProfileService.hideFriends(username));
+        return ResponseEntity.ok(userProfileService.hideFriends(username, hide));
     }
 
     @PutMapping("restrict_messages")

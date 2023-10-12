@@ -155,11 +155,11 @@ public class UserProfileService {
         return user.getFriends();
     }
 
-    User hideFriends(String username) {
+    User hideFriends(String username, boolean hide) {
         var user = userRepo
                 .findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
-        user.setFriendsHidden(true);
+        user.setFriendsHidden(hide);
         return userRepo.save(user);
     }
 
