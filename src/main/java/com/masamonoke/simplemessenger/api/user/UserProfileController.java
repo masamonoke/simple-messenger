@@ -2,7 +2,6 @@ package com.masamonoke.simplemessenger.api.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.masamonoke.simplemessenger.entities.user.User;
-import jakarta.persistence.PreUpdate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

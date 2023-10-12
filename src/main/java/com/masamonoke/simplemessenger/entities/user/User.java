@@ -2,7 +2,6 @@ package com.masamonoke.simplemessenger.entities.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.sqm.tree.expression.SqmByUnit;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

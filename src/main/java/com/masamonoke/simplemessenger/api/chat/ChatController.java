@@ -14,13 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
-import static com.masamonoke.simplemessenger.api.Utils.getTokenFromHeader;
-
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
-    //private final SimpMessagingTemplate messagingTemplate;
     private final ChatService chatService;
 
     @MessageMapping("/message") // app/message

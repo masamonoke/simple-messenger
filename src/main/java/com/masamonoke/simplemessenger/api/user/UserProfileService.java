@@ -1,7 +1,6 @@
 package com.masamonoke.simplemessenger.api.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masamonoke.simplemessenger.api.auth.service.ConfirmationTokenService;
 import com.masamonoke.simplemessenger.api.auth.service.EmailConfirmService;
 import com.masamonoke.simplemessenger.email.EmailSender;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.UUID;
 
 import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
