@@ -48,6 +48,9 @@ npm run start
 ```
 
 # API
+
+Also you can check Swagger to learn about API: ```https://app.swaggerhub.com/apis/MASAMONOKE_1/simple-messenger/1.0.0```
+
 ## Authorization and authentication
 All authorization and authentication endpoints is excluded from Spring Security
 ### Register
@@ -86,7 +89,8 @@ curl --location 'localhost:3003/api/v1/auth/register' \
 }'
 ```
 ### Authenication
-Receives user credentials and returns access and refresh tokens
+Receives user credentials and returns access and refresh tokens.
+Note that if you authenticate after for e.g. register then all previous tokens will be revoked and no longer valid
 ```
 POST: localhost:3003/api/v1/auth/authenticate
 ```
@@ -115,7 +119,8 @@ curl --location 'localhost:3003/api/v1/auth/authenticate' \
 ```
 
 ### Refresh
-Receives refresh token in Authorization header and returns new valid access token
+Receives refresh token in Authorization header and returns new valid access token.
+Note that is returns refresh token and it is the same that was passed within Authorization header.
 
 ```
 POST: localhost:3003/api/v1/auth/refresh
