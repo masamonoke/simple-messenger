@@ -5,6 +5,7 @@ import com.masamonoke.simplemessenger.api.auth.service.ConfirmationTokenService;
 import com.masamonoke.simplemessenger.api.auth.service.EmailConfirmService;
 import com.masamonoke.simplemessenger.email.EmailSender;
 import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
+import com.masamonoke.simplemessenger.entities.user.Role;
 import com.masamonoke.simplemessenger.entities.user.User;
 import com.masamonoke.simplemessenger.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,7 +35,8 @@ public class UserProfileService {
     private boolean isValidUser(String token, User user) throws JsonProcessingException {
         var map = decodeToken(token);
         var username = map.get("sub");
-        return username.equals(user.getUsername());
+        var requestingUser = userRepo.findByUsername(username).orElse(null);
+        return username.equals(user.getUsername()) || requestingUser != null && requestingUser.getRole().equals(Role.Admin);
     }
 
     private IllegalStateException produceUserException(User user, Long id) {
@@ -46,7 +47,6 @@ public class UserProfileService {
         }
     }
 
-    // TODO: check user role. If it admin role then that user can get any user profile
     User getUserById(Long id, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElse(null);
         if (user != null && isValidUser(token, user)) {

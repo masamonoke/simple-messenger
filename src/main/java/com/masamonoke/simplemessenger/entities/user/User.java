@@ -32,7 +32,8 @@ public class User implements UserDetails {
     private boolean isEmailConfirmed = false;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(nullable = false)
+    private Role role = Role.User;
     private boolean isEnabled;
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
