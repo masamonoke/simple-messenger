@@ -1,7 +1,7 @@
 # Note
 Project is still in development and some things may change
 # About
-This is an implementation of simple messenger application built with Spring Boot and a little frontend on React
+This is an implementation of simple messenger application built with Spring Boot 6 and a little frontend on React
 # Usage
 For now implemented:
 * Authorization and authentication with JWT (session is hold in JWT and these tokens is revoked on logout)
