@@ -49,7 +49,7 @@ npm run start
 
 # API
 
-Also you can check Swagger to learn about API: ```https://app.swaggerhub.com/apis/MASAMONOKE_1/simple-messenger/1.0.0```
+Also you can check [Swagger](https://app.swaggerhub.com/apis/MASAMONOKE_1/simple-messenger/1.0.0) to learn about API.
 
 ## Authorization and authentication
 All authorization and authentication endpoints is excluded from Spring Security
