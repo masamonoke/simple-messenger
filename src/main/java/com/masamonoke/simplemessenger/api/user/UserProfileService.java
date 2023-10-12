@@ -19,6 +19,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
+
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
@@ -31,11 +33,7 @@ public class UserProfileService {
     private String host;
 
     private boolean isValidUser(String token, User user) throws JsonProcessingException {
-        String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        String payload = new String(decoder.decode(chunks[1]));
-        var om = new ObjectMapper();
-        var map = om.readValue(payload, HashMap.class);
+        var map = decodeToken(token);
         var username = map.get("sub");
         return username.equals(user.getUsername());
     }
@@ -48,6 +46,7 @@ public class UserProfileService {
         }
     }
 
+    // TODO: check user role. If it admin role then that user can get any user profile
     User getUserById(Long id, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElse(null);
         if (user != null && isValidUser(token, user)) {

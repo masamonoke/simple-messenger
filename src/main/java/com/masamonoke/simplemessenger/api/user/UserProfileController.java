@@ -7,16 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.masamonoke.simplemessenger.api.Utils.getTokenFromHeader;
+
 @RestController
 @RequestMapping("/api/v1/profile/user")
 @RequiredArgsConstructor
 public class UserProfileController {
     private final UserProfileService userProfileService;
-
-    private String getTokenFromHeader(String header) {
-        var tokenStartIdx = 7;
-        return header.substring(tokenStartIdx);
-    }
 
     @GetMapping()
     ResponseEntity<User> getUserById(@RequestParam("id") Long id, @RequestHeader("Authorization") String header) throws JsonProcessingException {
