@@ -88,9 +88,10 @@ public class UserProfileController {
     }
 
     @PutMapping("restrict_messages")
-    ResponseEntity<User> restrictMessages(@RequestHeader("Authorization") String header) throws JsonProcessingException {
+    ResponseEntity<User> restrictMessages(
+            @RequestParam("restrict") boolean restrict, @RequestHeader("Authorization") String header) throws JsonProcessingException {
         var token = getTokenFromHeader(header);
         var username = decodeToken(token).get("sub");
-        return ResponseEntity.ok(userProfileService.allowPrivateMessageOnlyToFriends(username));
+        return ResponseEntity.ok(userProfileService.allowPrivateMessageOnlyToFriends(username, restrict));
     }
 }

@@ -163,11 +163,11 @@ public class UserProfileService {
         return userRepo.save(user);
     }
 
-    User allowPrivateMessageOnlyToFriends(String username) {
+    User allowPrivateMessageOnlyToFriends(String username, boolean restrict) {
         var user = userRepo
                 .findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
-        user.setPrivateMessageFromFriendsOnly(true);
+        user.setPrivateMessageFromFriendsOnly(restrict);
         return userRepo.save(user);
     }
 
