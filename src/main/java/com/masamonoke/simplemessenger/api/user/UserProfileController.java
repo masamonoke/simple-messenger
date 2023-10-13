@@ -11,6 +11,8 @@ import java.util.Set;
 import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
 import static com.masamonoke.simplemessenger.api.Utils.getTokenFromHeader;
 
+// TODO: change codes for various errors like not found, token parse error instead of all 403
+
 @RestController
 @RequestMapping("/api/v1/profile/user")
 @RequiredArgsConstructor

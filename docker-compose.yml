@@ -13,6 +13,18 @@ services:
       - 'POSTGRES_DB=simple-messenger'
       - 'POSTGRES_PASSWORD=password'
 
+  postgres-test:
+    container_name: 'simple-messenger-postgres-test'
+    image: 'postgres:11.2'
+    restart: always
+    ports:
+      - '5435:5432'
+    environment:
+      - 'POSTGRES_USER=username'
+      - 'POSTGRES_DB=simple-messenger-test'
+      - 'POSTGRES_PASSWORD=password'
+
+
   maildev:
     image: maildev/maildev
     restart: always

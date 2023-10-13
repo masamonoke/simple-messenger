@@ -3,6 +3,7 @@ package com.masamonoke.simplemessenger.api.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masamonoke.simplemessenger.entities.user.Role;
 import com.masamonoke.simplemessenger.entities.user.User;
+import com.masamonoke.simplemessenger.repo.ConfirmationTokenRepo;
 import com.masamonoke.simplemessenger.repo.TokenRepo;
 import com.masamonoke.simplemessenger.repo.UserRepo;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@TestPropertySource(locations = "classpath:test.properties")
 class AuthControllerTest {
     private MockMvc mockMvc;
     @Autowired
@@ -37,6 +40,8 @@ class AuthControllerTest {
     private TokenRepo tokenRepo;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private ConfirmationTokenRepo confirmationTokenRepo;
 
     @BeforeAll
     public static void createUser() {
@@ -52,6 +57,7 @@ class AuthControllerTest {
     @AfterEach
     public void deleteUser() {
         tokenRepo.deleteAll();
+        confirmationTokenRepo.deleteAll();
         userRepo.deleteAll();
     }
 
@@ -126,7 +132,6 @@ class AuthControllerTest {
         var jsonToken = res.getResponse().getContentAsString();
         var tokensMap = mapper.readValue(jsonToken, HashMap.class);
         var accessToken = tokensMap.get("access_token");
-        var refreshToken = tokensMap.get("refreshToken");
 
         res = mockMvc.perform(get("/api/v1/secured_test").header("Authorization", "Bearer " + accessToken)).andReturn();
         assertEquals(200, res.getResponse().getStatus());
