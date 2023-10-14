@@ -2,7 +2,7 @@
 This is an implementation of simple messenger application built with Spring Boot 6 and a little frontend on React
 # Usage
 For now implemented:
-* Authorization and authentication with JWT (session is hold in JWT and these tokens is revoked on logout)
+* Authorization and authentication with JWT (session is hold in JWT and these tokens are revoked on logout)
 * Users can register and logout
 * Users can change their profile (edit email, password, first name, last name), delete account and restore it
 * Users can exchange with messages (through websockets, to try feature use frontend in /frontend/react-client). Users can restrict exchange to only with friends.
@@ -12,7 +12,7 @@ For now implemented:
 * Maven
 * npm (if you want to try websocket message exchanging)
 # Build
-Note that project build with Java 17 version. The earliest version you can use is 16.
+Note that project built with Java 17 version. The earliest version you can use is 16.
 Pay attention that complete build will take these ports:
 * 8080
 * 8025
