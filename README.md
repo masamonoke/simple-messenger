@@ -17,6 +17,7 @@ Pay attention that complete build will take these ports:
 * 8080
 * 8025
 * 5434
+* 5435
 * 3003
 * 3000
 1. Before all else you need to aggregate all needed docker containers. To do this from root run this command in shell:
