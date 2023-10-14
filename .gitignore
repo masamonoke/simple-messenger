@@ -6,6 +6,7 @@ target/
 .DS_Store
 .vim
 node_modules
+.mvn
 
 ### STS ###
 .apt_generated
