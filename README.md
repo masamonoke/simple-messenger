@@ -14,6 +14,7 @@ For now implemented:
 * Maven
 * npm (if you want to try websocket message exchanging)
 # Build
+Note that project build with Java 17 version. The earliest version you can use is 16.
 Pay attention that complete build will take these ports:
 * 8080
 * 8025
