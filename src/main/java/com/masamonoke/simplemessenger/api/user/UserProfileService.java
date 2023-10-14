@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
+import static com.masamonoke.simplemessenger.api.AuthTokenUtils.decodeToken;
 
 // TODO: create UserNotFoundByIdException class and UserNotFoundByUsernameException
 @Service
@@ -108,6 +108,7 @@ public class UserProfileService {
     }
 
     // TODO: enable account after email sent link confirmation
+    // TODO: probably should revoke all tokens but still spring security won't pass disabled users
     User restoreAccount(User user) {
         var savedUser = userRepo
                 .findByUsername(user.getUsername())
@@ -120,7 +121,7 @@ public class UserProfileService {
             savedUser.setPassword(user.getPassword());
             return userRepo.save(savedUser);
         }
-        throw new InvalidParameterException(String.format("There is no user with username=%s or email=$s", user.getEmail(), user.getEmail()));
+        throw new InvalidParameterException(String.format("There is no user with username=%s or email=%s", user.getEmail(), user.getEmail()));
     }
 
     UserDisplay addFriend(String username, String friendUsername) {

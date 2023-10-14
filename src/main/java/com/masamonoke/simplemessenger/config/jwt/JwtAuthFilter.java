@@ -1,6 +1,6 @@
 package com.masamonoke.simplemessenger.config.jwt;
 
-import com.masamonoke.simplemessenger.repo.TokenRepo;
+import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final TokenRepo tokenRepo;
+    private final AuthTokenRepo authTokenRepo;
     private final UserDetailsService userDetailsService;
 
     @Override
@@ -38,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         var username = jwtService.extractUsername(jwt);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userDetails = userDetailsService.loadUserByUsername(username);
-            boolean isTokenValid = tokenRepo.findByToken(jwt)
+            boolean isTokenValid = authTokenRepo.findByToken(jwt)
                     .map(t -> !t.isExpired() && !t.isRevoked())
                     .orElse(false);
             if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid && userDetails.isEnabled()) {

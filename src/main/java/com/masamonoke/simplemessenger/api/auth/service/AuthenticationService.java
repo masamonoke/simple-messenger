@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masamonoke.simplemessenger.config.jwt.JwtService;
 import com.masamonoke.simplemessenger.email.EmailSender;
 import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
-import com.masamonoke.simplemessenger.entities.token.Token;
+import com.masamonoke.simplemessenger.entities.token.AuthToken;
 import com.masamonoke.simplemessenger.entities.user.Role;
 import com.masamonoke.simplemessenger.entities.user.User;
-import com.masamonoke.simplemessenger.repo.TokenRepo;
+import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import com.masamonoke.simplemessenger.repo.UserRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +30,7 @@ import java.util.UUID;
 @Slf4j
 public class AuthenticationService {
     private final UserRepo userRepo;
-    private final TokenRepo tokenRepo;
+    private final AuthTokenRepo authTokenRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -98,18 +98,18 @@ public class AuthenticationService {
     }
 
     private void saveUserToken(User user, String token) {
-        var t = Token
+        var t = AuthToken
                 .builder()
                 .user(user)
                 .token(token)
                 .expired(false)
                 .revoked(false)
                 .build();
-        tokenRepo.save(t);
+        authTokenRepo.save(t);
     }
 
     private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepo.findAllValidTokenByUser(user.getId());
+        var validUserTokens = authTokenRepo.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty()) {
             return;
         }
@@ -117,7 +117,7 @@ public class AuthenticationService {
             t.setExpired(true);
             t.setRevoked(true);
         });
-        tokenRepo.saveAll(validUserTokens);
+        authTokenRepo.saveAll(validUserTokens);
     }
 
     public String confirmToken(String token) {

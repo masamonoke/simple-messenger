@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
-import static com.masamonoke.simplemessenger.api.Utils.getTokenFromHeader;
+import static com.masamonoke.simplemessenger.api.AuthTokenUtils.decodeToken;
+import static com.masamonoke.simplemessenger.api.AuthTokenUtils.getTokenFromHeader;
 
 @Service
 @RequiredArgsConstructor

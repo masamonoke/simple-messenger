@@ -1,7 +1,7 @@
 package com.masamonoke.simplemessenger.config.websocket;
 
 import com.masamonoke.simplemessenger.config.jwt.JwtService;
-import com.masamonoke.simplemessenger.repo.TokenRepo;
+import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketAuthenticationConfig implements WebSocketMessageBrokerConfigurer {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepo tokenRepo;
+    private final AuthTokenRepo authTokenRepo;
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
@@ -45,7 +45,7 @@ public class WebSocketAuthenticationConfig implements WebSocketMessageBrokerConf
                     var jwt = authorization.get(0);
                     var username = jwtService.extractUsername(jwt);
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        var isTokenValid = tokenRepo.findByToken(jwt)
+                        var isTokenValid = authTokenRepo.findByToken(jwt)
                                 .map(t -> !t.isExpired() && !t.isRevoked())
                                 .orElse(false);
                         var userDetails = userDetailsService.loadUserByUsername(username);

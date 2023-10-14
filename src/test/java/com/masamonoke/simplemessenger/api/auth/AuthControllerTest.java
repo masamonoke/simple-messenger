@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.masamonoke.simplemessenger.entities.user.Role;
 import com.masamonoke.simplemessenger.entities.user.User;
 import com.masamonoke.simplemessenger.repo.ConfirmationTokenRepo;
-import com.masamonoke.simplemessenger.repo.TokenRepo;
+import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import com.masamonoke.simplemessenger.repo.UserRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,7 +37,7 @@ class AuthControllerTest {
     private ObjectMapper objectMapper;
     private static User user;
     @Autowired
-    private TokenRepo tokenRepo;
+    private AuthTokenRepo authTokenRepo;
     @Autowired
     private UserRepo userRepo;
     @Autowired
@@ -56,7 +56,7 @@ class AuthControllerTest {
 
     @AfterEach
     public void deleteUser() {
-        tokenRepo.deleteAll();
+        authTokenRepo.deleteAll();
         confirmationTokenRepo.deleteAll();
         userRepo.deleteAll();
     }
@@ -176,4 +176,28 @@ class AuthControllerTest {
         res = mockMvc.perform(get("/api/v1/secured_test").header("Authorization", "Bearer " + accessToken)).andReturn();
         assertEquals(200, res.getResponse().getStatus());
     }
+
+    @Test
+    public void logoutTest() throws Exception {
+        var json = objectMapper.writeValueAsString(user);
+        var res = mockMvc.perform(post("/api/v1/auth/register")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        assertEquals(200, res.getResponse().getStatus());
+        // tokens created based on milliseconds and between register and auth not enough time passed and tokens will be equal that is error
+        // because of that sleep is needed
+        Thread.sleep(1000);
+
+        var mapper = new ObjectMapper();
+        var jsonToken = res.getResponse().getContentAsString();
+        var tokensMap = mapper.readValue(jsonToken, HashMap.class);
+        var accessToken = tokensMap.get("access_token");
+        res = mockMvc.perform(post("/api/v1/auth/logout").header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(200, res.getResponse().getStatus());
+
+        res = mockMvc.perform(get("/api/v1/secured_test").header("Authorization", "Bearer " + accessToken)).andReturn();
+        assertEquals(403, res.getResponse().getStatus());
+    }
+
+
 }

@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Token {
+public class AuthToken {
     @Id
     @GeneratedValue
     private Long id;

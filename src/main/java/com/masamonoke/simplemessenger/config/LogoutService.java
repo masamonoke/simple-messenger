@@ -1,6 +1,6 @@
 package com.masamonoke.simplemessenger.config;
 
-import com.masamonoke.simplemessenger.repo.TokenRepo;
+import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
-    private final TokenRepo tokenRepo;
+    private final AuthTokenRepo authTokenRepo;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -22,11 +22,11 @@ public class LogoutService implements LogoutHandler {
         }
         var tokenStartIdx = 7;
         var token = authHeader.substring(tokenStartIdx);
-        var storedToken = tokenRepo.findByToken(token).orElse(null);
+        var storedToken = authTokenRepo.findByToken(token).orElse(null);
         if (storedToken != null) {
             storedToken.setExpired(true);
             storedToken.setRevoked(true);
-            tokenRepo.save(storedToken);
+            authTokenRepo.save(storedToken);
             SecurityContextHolder.clearContext();
         }
     }

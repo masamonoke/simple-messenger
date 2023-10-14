@@ -7,7 +7,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Utils {
+public class AuthTokenUtils {
     public static String getTokenFromHeader(String header) {
         var tokenStartIdx = 7;
         return header.substring(tokenStartIdx);

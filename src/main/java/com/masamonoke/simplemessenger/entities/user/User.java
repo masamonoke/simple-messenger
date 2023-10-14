@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -18,7 +19,6 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class User implements UserDetails {
     @Id
     @GeneratedValue
@@ -37,7 +37,6 @@ public class User implements UserDetails {
     private boolean isEnabled;
     @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
-    @EqualsAndHashCode.Exclude
     private Set<User> friends;
     private boolean isFriendsHidden = false;
     private boolean isPrivateMessageFromFriendsOnly = false;
@@ -75,5 +74,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(username, user.username) && Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, email);
     }
 }

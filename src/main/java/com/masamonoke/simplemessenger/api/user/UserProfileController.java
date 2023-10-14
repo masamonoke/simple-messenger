@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static com.masamonoke.simplemessenger.api.Utils.decodeToken;
-import static com.masamonoke.simplemessenger.api.Utils.getTokenFromHeader;
+import static com.masamonoke.simplemessenger.api.AuthTokenUtils.decodeToken;
+import static com.masamonoke.simplemessenger.api.AuthTokenUtils.getTokenFromHeader;
 
 // TODO: change codes for various errors like not found, token parse error instead of all 403
 
