@@ -337,7 +337,7 @@ curl --location --request PUT 'localhost:3003/api/v1/profile/user/hide_friends' 
 ### Restrict messages
 Similiar to previous endpoint. Forbids to receive messages from no one but friends.
 ```
-localhost:3003/api/v1/profile/user/restrict_messages?restrict=true
+PUT: localhost:3003/api/v1/profile/user/restrict_messages?restrict=true
 ```
 
 ```console
