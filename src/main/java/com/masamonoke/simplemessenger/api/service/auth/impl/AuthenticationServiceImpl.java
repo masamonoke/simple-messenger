@@ -1,10 +1,16 @@
-package com.masamonoke.simplemessenger.api.auth.service;
+package com.masamonoke.simplemessenger.api.service.auth.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.masamonoke.simplemessenger.config.jwt.JwtService;
+import com.masamonoke.simplemessenger.api.dto.AuthenticationRequest;
+import com.masamonoke.simplemessenger.api.dto.AuthenticationResponse;
+import com.masamonoke.simplemessenger.api.dto.RegisterRequest;
+import com.masamonoke.simplemessenger.api.service.auth.AuthenticationService;
+import com.masamonoke.simplemessenger.api.service.auth.ConfirmationTokenService;
+import com.masamonoke.simplemessenger.api.service.auth.EmailConfirmService;
+import com.masamonoke.simplemessenger.api.service.jwt.JwtService;
 import com.masamonoke.simplemessenger.email.EmailSender;
-import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
 import com.masamonoke.simplemessenger.entities.token.AuthToken;
+import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
 import com.masamonoke.simplemessenger.entities.user.Role;
 import com.masamonoke.simplemessenger.entities.user.User;
 import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
@@ -28,7 +34,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepo userRepo;
     private final AuthTokenRepo authTokenRepo;
     private final PasswordEncoder passwordEncoder;

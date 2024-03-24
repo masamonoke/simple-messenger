@@ -1,9 +1,9 @@
-package com.masamonoke.simplemessenger.api.auth;
+package com.masamonoke.simplemessenger.api.controller.auth;
 
-import com.masamonoke.simplemessenger.api.auth.service.AuthenticationRequest;
-import com.masamonoke.simplemessenger.api.auth.service.AuthenticationResponse;
-import com.masamonoke.simplemessenger.api.auth.service.AuthenticationService;
-import com.masamonoke.simplemessenger.api.auth.service.RegisterRequest;
+import com.masamonoke.simplemessenger.api.dto.AuthenticationRequest;
+import com.masamonoke.simplemessenger.api.dto.AuthenticationResponse;
+import com.masamonoke.simplemessenger.api.dto.RegisterRequest;
+import com.masamonoke.simplemessenger.api.service.auth.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

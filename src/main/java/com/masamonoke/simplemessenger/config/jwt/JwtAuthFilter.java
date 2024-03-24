@@ -1,5 +1,6 @@
 package com.masamonoke.simplemessenger.config.jwt;
 
+import com.masamonoke.simplemessenger.api.service.jwt.JwtService;
 import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

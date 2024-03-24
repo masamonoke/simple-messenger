@@ -1,6 +1,6 @@
 package com.masamonoke.simplemessenger.config.websocket;
 
-import com.masamonoke.simplemessenger.config.jwt.JwtService;
+import com.masamonoke.simplemessenger.api.service.jwt.JwtService;
 import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

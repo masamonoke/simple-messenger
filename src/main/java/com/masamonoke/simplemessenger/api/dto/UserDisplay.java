@@ -1,4 +1,4 @@
-package com.masamonoke.simplemessenger.api.user;
+package com.masamonoke.simplemessenger.api.dto;
 
 import com.masamonoke.simplemessenger.entities.user.Role;
 import com.masamonoke.simplemessenger.entities.user.User;

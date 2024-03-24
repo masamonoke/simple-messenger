@@ -1,4 +1,4 @@
-package com.masamonoke.simplemessenger.config;
+package com.masamonoke.simplemessenger.api.service.jwt.impl;
 
 import com.masamonoke.simplemessenger.repo.AuthTokenRepo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LogoutService implements LogoutHandler {
+public class LogoutServiceImpl implements LogoutHandler {
     private final AuthTokenRepo authTokenRepo;
 
     @Override

@@ -1,6 +1,7 @@
-package com.masamonoke.simplemessenger.api.chat;
+package com.masamonoke.simplemessenger.api.controller.chat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.masamonoke.simplemessenger.api.service.chat.ChatService;
 import com.masamonoke.simplemessenger.entities.message.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

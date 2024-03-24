@@ -1,8 +1,10 @@
-package com.masamonoke.simplemessenger.api.user;
+package com.masamonoke.simplemessenger.api.service.user.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.masamonoke.simplemessenger.api.auth.service.ConfirmationTokenService;
-import com.masamonoke.simplemessenger.api.auth.service.EmailConfirmService;
+import com.masamonoke.simplemessenger.api.dto.UserDisplay;
+import com.masamonoke.simplemessenger.api.service.auth.ConfirmationTokenService;
+import com.masamonoke.simplemessenger.api.service.auth.EmailConfirmService;
+import com.masamonoke.simplemessenger.api.service.user.UserProfileService;
 import com.masamonoke.simplemessenger.email.EmailSender;
 import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
 import com.masamonoke.simplemessenger.entities.user.Role;
@@ -23,7 +25,7 @@ import static com.masamonoke.simplemessenger.api.AuthTokenUtils.decodeToken;
 // TODO: create UserNotFoundByIdException class and UserNotFoundByUsernameException
 @Service
 @RequiredArgsConstructor
-public class UserProfileService {
+public class UserProfileServiceImpl implements UserProfileService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final EmailConfirmService emailConfirmService;
@@ -47,7 +49,7 @@ public class UserProfileService {
         }
     }
 
-    User getUserById(Long id, String token) throws JsonProcessingException {
+    public User getUserById(Long id, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElse(null);
         if (user != null && isValidUser(token, user)) {
             return user;
@@ -55,7 +57,7 @@ public class UserProfileService {
         throw produceUserException(user, id);
     }
 
-    User updateFirstName(Long id, String firstName, String token) throws JsonProcessingException {
+    public User updateFirstName(Long id, String firstName, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", id)));
         if (isValidUser(token, user)) {
             user.setFirstName(firstName);
@@ -64,7 +66,7 @@ public class UserProfileService {
         throw produceUserException(user, id);
     }
 
-    User updateLastName(Long id, String lastName, String token) throws JsonProcessingException {
+    public User updateLastName(Long id, String lastName, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", id)));
         if (isValidUser(token, user)) {
             user.setLastName(lastName);
@@ -73,7 +75,7 @@ public class UserProfileService {
         throw produceUserException(user, id);
     }
 
-    User updatePassword(User user, String token) throws JsonProcessingException {
+    public User updatePassword(User user, String token) throws JsonProcessingException {
         var savedUser = userRepo.findById(user.getId())
                 .orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", user.getId())));
         if (!isValidUser(token, savedUser)) {
@@ -83,7 +85,7 @@ public class UserProfileService {
         return userRepo.save(savedUser);
     }
 
-    User updateEmail(Long id, String email, String token) throws JsonProcessingException {
+    public User updateEmail(Long id, String email, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", id)));
         if (!isValidUser(token, user)) {
             throw produceUserException(user, id);
@@ -98,7 +100,7 @@ public class UserProfileService {
         return user;
     }
 
-    void deleteAccount(Long id, String token) throws JsonProcessingException {
+    public void deleteAccount(Long id, String token) throws JsonProcessingException {
         var user = userRepo.findById(id).orElseThrow(() -> new InvalidParameterException(String.format("User with id=%d not found", id)));
         if (!isValidUser(token, user)) {
             throw produceUserException(user, id);
@@ -109,7 +111,7 @@ public class UserProfileService {
 
     // TODO: enable account after email sent link confirmation
     // TODO: probably should revoke all tokens but still spring security won't pass disabled users
-    User restoreAccount(User user) {
+    public User restoreAccount(User user) {
         var savedUser = userRepo
                 .findByUsername(user.getUsername())
                 .orElseThrow(() -> new InvalidParameterException(String.format("User with username=%s not found", user.getUsername())));
@@ -124,7 +126,7 @@ public class UserProfileService {
         throw new InvalidParameterException(String.format("There is no user with username=%s or email=%s", user.getEmail(), user.getEmail()));
     }
 
-    UserDisplay addFriend(String username, String friendUsername) {
+    public UserDisplay addFriend(String username, String friendUsername) {
         var friend = userRepo
                 .findByUsername(friendUsername)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", friendUsername)));
@@ -139,14 +141,14 @@ public class UserProfileService {
         return new UserDisplay(user);
     }
 
-    Set<User> getFriends(String username) {
+    public Set<User> getFriends(String username) {
         var user = userRepo
                 .findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
         return user.getFriends();
     }
 
-    Set<User> getAnotherUserFriendsList(Long id) {
+    public Set<User> getAnotherUserFriendsList(Long id) {
         var user = userRepo
                 .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with id=%d", id)));
@@ -156,7 +158,7 @@ public class UserProfileService {
         return user.getFriends();
     }
 
-    User hideFriends(String username, boolean hide) {
+    public User hideFriends(String username, boolean hide) {
         var user = userRepo
                 .findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));
@@ -164,7 +166,7 @@ public class UserProfileService {
         return userRepo.save(user);
     }
 
-    User allowPrivateMessageOnlyToFriends(String username, boolean restrict) {
+    public User allowPrivateMessageOnlyToFriends(String username, boolean restrict) {
         var user = userRepo
                 .findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find user with username=%s", username)));

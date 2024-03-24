@@ -1,6 +1,8 @@
-package com.masamonoke.simplemessenger.api.user;
+package com.masamonoke.simplemessenger.api.controller.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.masamonoke.simplemessenger.api.dto.UserDisplay;
+import com.masamonoke.simplemessenger.api.service.user.UserProfileService;
 import com.masamonoke.simplemessenger.entities.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

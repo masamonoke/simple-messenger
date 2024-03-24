@@ -1,5 +1,6 @@
-package com.masamonoke.simplemessenger.config.jwt;
+package com.masamonoke.simplemessenger.api.service.jwt.impl;
 
+import com.masamonoke.simplemessenger.api.service.jwt.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +20,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
     @Value("${secret}")
     private String secret;
     @Value("${access_expiration}")

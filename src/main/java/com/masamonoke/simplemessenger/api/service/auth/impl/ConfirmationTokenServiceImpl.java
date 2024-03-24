@@ -1,5 +1,6 @@
-package com.masamonoke.simplemessenger.api.auth.service;
+package com.masamonoke.simplemessenger.api.service.auth.impl;
 
+import com.masamonoke.simplemessenger.api.service.auth.ConfirmationTokenService;
 import com.masamonoke.simplemessenger.entities.token.ConfirmationToken;
 import com.masamonoke.simplemessenger.repo.ConfirmationTokenRepo;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class ConfirmationTokenService {
+public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     private final ConfirmationTokenRepo confirmationTokenRepo;
 
     public void saveToken(ConfirmationToken token) {

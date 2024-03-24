@@ -1,6 +1,7 @@
-package com.masamonoke.simplemessenger.api.chat;
+package com.masamonoke.simplemessenger.api.service.chat.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.masamonoke.simplemessenger.api.service.chat.ChatService;
 import com.masamonoke.simplemessenger.entities.message.ChatMessage;
 import com.masamonoke.simplemessenger.repo.ChatMessageRepo;
 import com.masamonoke.simplemessenger.repo.UserRepo;
@@ -17,12 +18,12 @@ import static com.masamonoke.simplemessenger.api.AuthTokenUtils.getTokenFromHead
 
 @Service
 @RequiredArgsConstructor
-public class ChatService {
+public class ChatServiceImpl implements ChatService {
     private final UserRepo userRepo;
     private final ChatMessageRepo chatMessageRepo;
     private final SimpMessagingTemplate messagingTemplate;
 
-    ChatMessage receivePrivateMessage(ChatMessage message) {
+    public ChatMessage receivePrivateMessage(ChatMessage message) {
         var receiverName = message.getReceiverName();
         var receiver = userRepo
                 .findByUsername(receiverName)
@@ -47,7 +48,7 @@ public class ChatService {
         return savedMessage;
     }
 
-    List<ChatMessage> getMessageHistory(String receiver, String authHeader) throws JsonProcessingException {
+    public List<ChatMessage> getMessageHistory(String receiver, String authHeader) throws JsonProcessingException {
         var token = getTokenFromHeader(authHeader);
         var map = decodeToken(token);
         var username = map.get("sub");

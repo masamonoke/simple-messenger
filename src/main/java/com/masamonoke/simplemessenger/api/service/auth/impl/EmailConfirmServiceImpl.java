@@ -1,5 +1,7 @@
-package com.masamonoke.simplemessenger.api.auth.service;
+package com.masamonoke.simplemessenger.api.service.auth.impl;
 
+import com.masamonoke.simplemessenger.api.service.auth.ConfirmationTokenService;
+import com.masamonoke.simplemessenger.api.service.auth.EmailConfirmService;
 import com.masamonoke.simplemessenger.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class EmailConfirmService {
+public class EmailConfirmServiceImpl implements EmailConfirmService {
     private final ConfirmationTokenService confirmationTokenService;
     private final UserRepo userRepo;
 

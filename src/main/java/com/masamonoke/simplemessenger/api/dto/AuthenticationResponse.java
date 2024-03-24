@@ -1,4 +1,4 @@
-package com.masamonoke.simplemessenger.api.auth.service;
+package com.masamonoke.simplemessenger.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
