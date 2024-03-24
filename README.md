@@ -1,10 +1,8 @@
-# Note
-Project is still in development and some things may change
 # About
 This is an implementation of simple messenger application built with Spring Boot 6 and a little frontend on React
 # Usage
 For now implemented:
-* Authorization and authentication with JWT (session is hold in JWT and these tokens is revoked on logout)
+* Authorization and authentication with JWT (session is hold in JWT and these tokens are revoked on logout)
 * Users can register and logout
 * Users can change their profile (edit email, password, first name, last name), delete account and restore it
 * Users can exchange with messages (through websockets, to try feature use frontend in /frontend/react-client). Users can restrict exchange to only with friends.
@@ -14,10 +12,12 @@ For now implemented:
 * Maven
 * npm (if you want to try websocket message exchanging)
 # Build
+Note that project built with Java 17 version. The earliest version you can use is 16.
 Pay attention that complete build will take these ports:
 * 8080
 * 8025
 * 5434
+* 5435
 * 3003
 * 3000
 1. Before all else you need to aggregate all needed docker containers. To do this from root run this command in shell:
@@ -337,7 +337,7 @@ curl --location --request PUT 'localhost:3003/api/v1/profile/user/hide_friends' 
 ### Restrict messages
 Similiar to previous endpoint. Forbids to receive messages from no one but friends.
 ```
-localhost:3003/api/v1/profile/user/restrict_messages?restrict=true
+PUT: localhost:3003/api/v1/profile/user/restrict_messages?restrict=true
 ```
 
 ```console
